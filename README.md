@@ -1,5 +1,5 @@
 # HTTP_db
-Simple and easy database manager using HTTP
+Simple and easy database manager using HTTP  
 [日本語版](https://github.com/nattyan-tv/HTTP_db/blob/master/README_ja.md)
 
 # Usage

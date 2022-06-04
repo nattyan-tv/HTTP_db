@@ -12,6 +12,7 @@ Simple and easy database manager using HTTP
 [Japanese version](https://nattyan-tv.github.io/HTTP_db/docs/ja-jp/index)  
 
 # Setting
+
 Name|Description|Type
 ---|---|---
 address|HTTP Server address|str

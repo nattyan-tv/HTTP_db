@@ -2,6 +2,7 @@
 `HTTP_db` is simple and easy database manager using HTTP.
 
 ## Write data
+
 Description|Value
 ---|---
 Endpoint|`/post`
@@ -16,17 +17,20 @@ If JSON with the same key is passed, the dictionary will be overwritten.
 <details>
 <summary>Example of write</summary>
 
+
 ```json
 {
     "keyname":"items"
 }
 ```
+
 </details>
 
 <details>
 <summary>Example of return</summary>
 
 - Success
+
 ```json
 {
     "status":"success"
@@ -34,16 +38,19 @@ If JSON with the same key is passed, the dictionary will be overwritten.
 ```
 
 - Failed
+
 ```json
 {
     "status":"error",
     "description":"Detail of error"
 }
 ```
+
 </details>
 
 
 ## Read data
+
 Description|Value
 ---|---
 Endpoint|`/get/<key>`
@@ -57,6 +64,7 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
 <summary>Example of return</summary>
 
 - Success
+
 ```json
 {
     "status":"success",
@@ -65,11 +73,13 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
 ```
 
 - Failed
+
 ```json
 {
     "status":"error",
     "description":"Detail of error"
 }
 ```
+
 </details>
 

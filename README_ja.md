@@ -12,6 +12,7 @@ HTTPを使用したとっつきやすいデータベースマネージャー
 [こちら（英語版）](https://nattyan-tv.github.io/HTTP_db/docs/en-us/index)  
 
 # 設定項目
+
 名前|説明|型
 ---|---|---
 address|HTTPサーバーのアドレス|str

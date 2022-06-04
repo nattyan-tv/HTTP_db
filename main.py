@@ -1,33 +1,63 @@
 import sanic
 import os, sys, json
+import joblib
 
-app = sanic.Sanic(name="Sanic")
+# Simple and database manager using HTTP
+
+sys.setrecursionlimit(10000)
+
+app = sanic.Sanic(name="HTTP_db")
 
 DATAS = {}
 SETTING = None
 
 try: SETTING = json.load(open(f'{sys.path[0]}/setting.json', 'r'))
-except OSError as err: print("An error has occurred during file opening\n(Permission...Exists...)"); sys.exit(1)
+except OSError as err: print("An error has occurred during opening setting file.\n(Permission...Exists...)\nERR:1"); sys.exit(1)
 
-if "address" not in SETTING or "port" not in SETTING or "debug" not in SETTING: print("The setting file is invalid."); sys.exit(2)
+if "address" not in SETTING or "port" not in SETTING or "debug" not in SETTING or "filename" not in SETTING: print("The setting file is invalid.\nERR:2"); sys.exit(2)
+
+if not os.path.isfile(SETTING["filename"]): joblib.dump(DATAS, SETTING["filename"], compress=3)
+try: DATAS = joblib.load(SETTING["filename"])
+except OSError: print("An error has occurred during opening database file.\n(Permission...)\nERR:4"); sys.exit(4)
+
+
+async def SaveDatabase():
+    joblib.dump(DATAS, SETTING["filename"], compress=3)
+    return None
+
 
 @app.route("/get/<key>")
 async def getResponse(request, key):
-    rtData = None
-    if key not in DATAS:
+    try:
         rtData = {}
-    else:
-        rtData = DATAS[key]
-    return sanic.response.json(rtData)
+        if key not in DATAS:
+            rtData = {"status":"error","description":"invalid key."}
+        else:
+            rtData = {"status":"success","value":DATAS[key]}
+        return sanic.response.json(rtData)
+    except Exception as err:
+        return sanic.response.json({"status":"error","description":err})
 
 
 @app.post("/post")
 async def postResponse(request):
     try:
         DATAS.update(request.json)
+        await SaveDatabase()
         return sanic.response.json({"status":"success"})
-    except BaseException as err:
+    except Exception as err:
         return sanic.response.json({"status":"error","description":err})
 
+
 if __name__ == '__main__':
+    print(f"""\
+HTTP_db
+Simple and easy database manager using HTTP.
+
+Tw: @nattyan_tv
+GH: @nattyan-tv
+
+Address: {SETTING['address']}:{SETTING['port']}
+Debug: {SETTING['debug']}
+Filename: {SETTING['filename']}""")
     app.run(host=SETTING["address"], port=SETTING["port"], debug=SETTING["debug"])

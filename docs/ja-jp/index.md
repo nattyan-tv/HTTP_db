@@ -3,7 +3,7 @@
 
 ## データの書き込み
 概要|値
----|---
+:---:|:---:
 エンドポイント|`/post`
 メソッド|`POST`
 送信データ形式|`json/application`
@@ -26,14 +26,14 @@
 <details>
 <summary>戻り値の例</summary>
 
-- 成功
+__成功__  
 ```json
 {
     "status":"success"
 }
 ```
 
-- 失敗
+__失敗__
 ```json
 {
     "status":"error",
@@ -45,18 +45,18 @@
 
 ## データの読み込み
 概要|値
----|---
+:---:|:---:
 エンドポイント|`/get/<key>`
 メソッド|`GET`
 戻りデータ形式|`json/application`
-
+  
 `<key>`に対応するデータベースの値が`JSON`形式で送信されます。  
 キーが存在しない場合は`description`に`invalid key.`が渡されて、`status`が`error`で返ります。
 
 <details>
 <summary>戻り値の例</summary>
 
-- 成功
+__成功__
 ```json
 {
     "status":"success",
@@ -64,7 +64,7 @@
 }
 ```
 
-- 失敗
+__失敗__
 ```json
 {
     "status":"error",

@@ -65,12 +65,17 @@ async def SaveDatabaseRemote():
 
 
 
-@app.route("/info")
+@app.get("/info")
 async def Info(request):
     return sanic.response.json(ApplicationDatas)
 
 
-@app.route("/get/<key>")
+@app.get("/get_all")
+async def GetAll(request):
+    return sanic.response.json(DATAS)
+
+
+@app.get("/get/<key>")
 async def getResponse(request, key):
     try:
         rtData = {}
@@ -102,6 +107,16 @@ async def deleteResponse(request, key):
             del DATAS[key]
             await SaveDatabase()
             return sanic.response.json({"status":"success"})
+    except Exception as err:
+        return sanic.response.json({"status":"error","description":err})
+
+
+@app.delete("/delete_all")
+async def deleteAll(request):
+    try:
+        DATAS.clear()
+        await SaveDatabase()
+        return sanic.response.json({"status":"success"})
     except Exception as err:
         return sanic.response.json({"status":"error","description":err})
 

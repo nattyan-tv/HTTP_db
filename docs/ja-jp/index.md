@@ -14,8 +14,7 @@
 渡されたJSONの値でデータベースの辞書が更新されます。  
 同一キーだった場合は上書きされます。
 
-<details>
-<summary>書き込み値の例</summary>
+- 書き込み値の例  
 
 ```json
 {
@@ -23,12 +22,9 @@
 }
 ```
 
-</details>
+- 戻り値の例  
 
-<details>
-<summary>戻り値の例</summary>
-
-- 成功
+__成功__
 
 ```json
 {
@@ -36,7 +32,7 @@
 }
 ```
 
-- 失敗
+__失敗__
 
 ```json
 {
@@ -44,8 +40,6 @@
     "description":"エラー内容"
 }
 ```
-
-</details>
 
 
 ## データの読み込み
@@ -59,10 +53,9 @@
 `<key>`に対応するデータベースの値が`JSON`形式で送信されます。  
 キーが存在しない場合は`description`に`invalid key.`が渡されて、`status`が`error`で返ります。
 
-<details>
-<summary>戻り値の例</summary>
+- 戻り値の例  
 
-- 成功
+__成功__
 
 ```json
 {
@@ -71,7 +64,7 @@
 }
 ```
 
-- 失敗
+__失敗__
 ```json
 {
     "status":"error",
@@ -91,10 +84,9 @@
 `<key>`に対応するデータベースの値を削除します。
 キーが存在しない場合は`description`に`invalid key.`が渡されて、`status`が`error`で返ります。
 
-<details>
-<summary>戻り値の例</summary>
+- 戻り値の例  
 
-- 成功
+__成功__
 
 ```json
 {
@@ -102,7 +94,8 @@
 }
 ```
 
-- 失敗
+__失敗__
+
 ```json
 {
     "status":"error",
@@ -110,5 +103,4 @@
 }
 ```
 
-</details>
 

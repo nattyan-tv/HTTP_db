@@ -14,9 +14,7 @@ Pass the value to write in `JSON` format.
 The database dictionary will be updated with the value of the passed JSON.  
 If JSON with the same key is passed, the dictionary will be overwritten.
 
-<details>
-<summary>Example of write</summary>
-
+- Example of write  
 
 ```json
 {
@@ -24,12 +22,10 @@ If JSON with the same key is passed, the dictionary will be overwritten.
 }
 ```
 
-</details>
 
-<details>
-<summary>Example of return</summary>
+- Example of return  
 
-- Success
+__Success__
 
 ```json
 {
@@ -37,7 +33,7 @@ If JSON with the same key is passed, the dictionary will be overwritten.
 }
 ```
 
-- Failed
+__Failed__
 
 ```json
 {
@@ -46,7 +42,6 @@ If JSON with the same key is passed, the dictionary will be overwritten.
 }
 ```
 
-</details>
 
 
 ## Read data
@@ -60,10 +55,9 @@ Return data type|`json/application`
 The value of the database corresponding to `<key>` is sent in `JSON` format.  
 If the key does not exist, `invalid key.` is passed to `description` and `status` returns `error`.
 
-<details>
-<summary>Example of return</summary>
+- Example of return  
 
-- Success
+__Success__
 
 ```json
 {
@@ -72,7 +66,7 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
 }
 ```
 
-- Failed
+__Failed__
 
 ```json
 {
@@ -93,10 +87,9 @@ Return data type|`json/application`
 Deletes the value passed to `key` from the database.
 If the key does not exist, `invalid key.` is passed to `description` and `status` returns `error`.
 
-<details>
-<summary>Example of return</summary>
+- Example of return  
 
-- Success
+__Success__
 
 ```json
 {
@@ -104,7 +97,7 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
 }
 ```
 
-- Failed
+__Failed__
 
 ```json
 {
@@ -112,7 +105,4 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
     "description":"Detail of error"
 }
 ```
-
-
-</details>
 

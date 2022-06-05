@@ -18,4 +18,6 @@ Name|Description|Type
 address|HTTP Server address|str
 port|HTTP Server port|int
 debug|HTTP Server debug mode|bool
-filename|Database filename|str
+remotesave|Remote save mode|bool
+location|If remotesave is true, database key, else, savedata location|str
+cell|If remotesave is true, database cell|str

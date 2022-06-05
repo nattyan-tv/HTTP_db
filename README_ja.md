@@ -18,4 +18,6 @@ HTTPを使用したとっつきやすいデータベースマネージャー
 address|HTTPサーバーのアドレス|str
 port|HTTPサーバーのポート番号|int
 debug|HTTPサーバーのデバッグモード|bool
-filename|データベースのファイル名|str
+remotesave|リモートモード|bool
+location|リモートモードが有効の場合、データベースのキー。無効の場合、データを保存する場所|str
+cell|リモートモードが有効の場合、データベースのセル。|str

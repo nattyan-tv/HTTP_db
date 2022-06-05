@@ -81,5 +81,38 @@ If the key does not exist, `invalid key.` is passed to `description` and `status
 }
 ```
 
+
+## Delete data
+
+Description|Value
+---|---
+Endpoint|`/delete/<key>`
+Method|`DELETE`
+Return data type|`json/application`
+
+Deletes the value passed to `key` from the database.
+If the key does not exist, `invalid key.` is passed to `description` and `status` returns `error`.
+
+<details>
+<summary>Example of return</summary>
+
+- Success
+
+```json
+{
+    "status":"success"
+}
+```
+
+- Failed
+
+```json
+{
+    "status":"error",
+    "description":"Detail of error"
+}
+```
+
+
 </details>
 

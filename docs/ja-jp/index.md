@@ -79,5 +79,36 @@
 }
 ```
 
+
+## データの削除
+
+概要|値
+---|---
+エンドポイント|`/delete/<key>`
+メソッド|`DELETE`
+戻りデータ形式|`json/application`
+
+`<key>`に対応するデータベースの値を削除します。
+キーが存在しない場合は`description`に`invalid key.`が渡されて、`status`が`error`で返ります。
+
+<details>
+<summary>戻り値の例</summary>
+
+- 成功
+
+```json
+{
+    "status":"success"
+}
+```
+
+- 失敗
+```json
+{
+    "status":"error",
+    "description":"エラー内容"
+}
+```
+
 </details>
 

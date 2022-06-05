@@ -49,6 +49,19 @@ async def postResponse(request):
         return sanic.response.json({"status":"error","description":err})
 
 
+@app.delete("/delete/<key>")
+async def deleteResponse(request, key):
+    try:
+        if key not in DATAS:
+            return sanic.response.json({"status":"error","description":"invalid key."})
+        else:
+            del DATAS[key]
+            await SaveDatabase()
+            return sanic.response.json({"status":"success"})
+    except Exception as err:
+        return sanic.response.json({"status":"error","description":err})
+
+
 if __name__ == '__main__':
     print(f"""\
 HTTP_db

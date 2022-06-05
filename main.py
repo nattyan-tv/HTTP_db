@@ -8,6 +8,14 @@ sys.setrecursionlimit(10000)
 
 app = sanic.Sanic(name="HTTP_db")
 
+ApplicationDatas = {
+    "title":"HTTP_db",
+    "version":"0.9.1",
+    "author":"nattyan-tv",
+    "repository":"https://github.com/nattyan-tv/HTTP_db.git"
+}
+
+
 DATAS = {}
 SETTING = None
 
@@ -24,6 +32,11 @@ except OSError: print("An error has occurred during opening database file.\n(Per
 async def SaveDatabase():
     joblib.dump(DATAS, SETTING["filename"], compress=3)
     return None
+
+
+@app.route("/info")
+async def Info(request):
+    return sanic.response.json(ApplicationDatas)
 
 
 @app.route("/get/<key>")
@@ -60,6 +73,7 @@ async def deleteResponse(request, key):
             return sanic.response.json({"status":"success"})
     except Exception as err:
         return sanic.response.json({"status":"error","description":err})
+
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 # This is the module version of HTTP_db
 
 import sanic
-import os, sys, json
+import os, sys, json, asyncio
 import joblib
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -27,19 +27,22 @@ async def SaveDatabaseRemote():
     WORKSHEET.update_acell(CELL, json.dumps(DATAS))
     return None
 
+app = sanic.Sanic(name="HTTP_db")
 
 class HTTP_db():
     def __init__(self, url:str, port:int, filename:str):
         self.url = url
         self.port = port
         self.filename = filename
-        self.app = sanic.Sanic(name="HTTP_db")
-        asyncio.ensure_future(app.run(host=url, port=port))
+
+
+    def run(self):
+        app.run(host=self.url, port=self.port)
 
 
     @app.get("/info")
     async def Info(request):
-        return sanic.response.json(ApplicationDatas)
+        return sanic.response.json({"title":"HTTP_db module edition"})
 
 
     @app.get("/get_all")
@@ -71,7 +74,7 @@ class HTTP_db():
 
 
     @app.delete("/delete/<key>")
-    async def deleteResponse(request, key):
+    async def deleteResponses(request, key):
         try:
             if key not in DATAS:
                 return sanic.response.json({"status":"error","description":"invalid key."})

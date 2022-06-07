@@ -3,3 +3,5 @@ setting.json
 
 # データーベースファイル
 file.db
+
+__pycache__

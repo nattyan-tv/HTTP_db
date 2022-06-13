@@ -4,4 +4,12 @@ setting.json
 # データーベースファイル
 file.db
 
+# Pythonキャッシュファイル
 __pycache__
+
+# モジュール用
+modules/build/*
+modules/dist/*
+modules/HTTP_db.egg-info/*
+modules/README.md
+modules/setup.py

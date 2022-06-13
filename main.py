@@ -11,7 +11,7 @@ app = sanic.Sanic(name="HTTP_db")
 
 ApplicationDatas = {
     "title":"HTTP_db",
-    "version":"0.9.1",
+    "version":"1.0",
     "author":"nattyan-tv",
     "repository":"https://github.com/nattyan-tv/HTTP_db.git"
 }

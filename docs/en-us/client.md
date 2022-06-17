@@ -110,6 +110,46 @@ It deletes all the data.
 - Return:
   - None
 
+## Ping
+
+`class HTTP_db.Ping()`
+
+- Attributes:
+  - [`send`](#property-send)
+  - [`reach`](#property-reach)
+  - [`receive`](#property-receive)
+  - [`ping`](#property-ping)
+
+### Methods
+
+### _property_ **send**
+
+Time the request was sent to the server
+
+- Type:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **reach**
+
+Time the request was processed by the server
+
+- Type:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **receive**
+
+Time the response was received
+
+- Type:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **ping**
+
+Ping value (round-trip latency)
+
+- Type:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
 ## Exceptions
 
 The following exceptions are raised by the functions of the `Client` class.

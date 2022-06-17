@@ -4,5 +4,6 @@
     "debug":false,
     "remotesave":false,
     "location":"file.db",
-    "cell":""
+    "cell":"",
+    "extras":[]
 }

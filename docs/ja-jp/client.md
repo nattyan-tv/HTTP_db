@@ -110,6 +110,46 @@ await client.post("temp", datas)
 - 返り値:
   - なし
 
+## Ping
+
+`class HTTP_db.Ping()`
+
+- Attributes:
+  - [`send`](#property-send)
+  - [`reach`](#property-reach)
+  - [`receive`](#property-receive)
+  - [`ping`](#property-ping)
+
+### メソッド
+
+### _property_ **send**
+
+サーバーにリクエストを送信した時間
+
+- 種類:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **reach**
+
+サーバーでリクエストを処理した時間
+
+- 種類:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **receive**
+
+レスポンスを処理した時間
+
+- 種類:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
+### _property_ **ping**
+
+Ping 値（往復のレイテンシー）
+
+- 種類:
+  - [_float_](https://docs.python.org/3/library/functions.html#float)
+
 ## Exceptions
 
 `Client`クラスで発生するエラーを表します。

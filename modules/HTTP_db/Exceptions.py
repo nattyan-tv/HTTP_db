@@ -26,3 +26,8 @@ class DatabaseDeleteError(HTTP_db_Exception):
 class UnknownDatabaseError(HTTP_db_Exception):
     """Raised when an unknown database error occurs"""
     pass
+
+
+class DatabaseIOError(HTTP_db_Exception):
+    """Raised when when a database file cannot be read."""
+    pass

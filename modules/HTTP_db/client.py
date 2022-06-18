@@ -61,6 +61,7 @@ HTTP_db Ping object
 `receive`: サーバーからレスポンスを受け取った時間  
 
 `ping`: Ping値"""
+
     def __init__(self, send: float, reach: float, receive: float):
         self.send = send
         self.reach = reach
@@ -79,7 +80,7 @@ class Client():
             async with session.get(f"http://{self.url}:{self.port}/info") as resp:
                 return await resp.json()
 
-    async def ping(self) -> float:
+    async def ping(self) -> Ping:
         now = datetime.datetime.now().timestamp()
         async with aiohttp.ClientSession() as session:
             async with session.get(f"http://{self.url}:{self.port}/ping") as r:

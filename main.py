@@ -15,7 +15,7 @@ app = sanic.Sanic(name="HTTP_db")
 
 ApplicationDatas = {
     "title": "HTTP_db",
-    "version": "1.2",
+    "version": "1.2.1",
     "author": "nattyan-tv",
     "repository": "https://github.com/nattyan-tv/HTTP_db.git"
 }
@@ -143,7 +143,6 @@ async def Ping(request):
 
 @app.post("/get_all")
 async def GetAll(request: sanic.Request):
-    print(request.json)
     if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
         return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     else:

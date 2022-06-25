@@ -29,5 +29,8 @@ class UnknownDatabaseError(HTTP_db_Exception):
 
 
 class DatabaseIOError(HTTP_db_Exception):
-    """Raised when when a database file cannot be read."""
+    """Raised when a database file cannot be read."""
     pass
+
+class DatabaseAuthenticationError(HTTP_db_Exception):
+    """Raisede when a database authentication error has occrred."""

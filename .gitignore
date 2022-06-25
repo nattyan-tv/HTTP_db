@@ -13,3 +13,5 @@ modules/dist/*
 modules/HTTP_db.egg-info/*
 modules/README.md
 modules/setup.py
+
+password

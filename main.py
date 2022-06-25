@@ -15,7 +15,7 @@ app = sanic.Sanic(name="HTTP_db")
 
 ApplicationDatas = {
     "title": "HTTP_db",
-    "version": "1.1.1",
+    "version": "1.2",
     "author": "nattyan-tv",
     "repository": "https://github.com/nattyan-tv/HTTP_db.git"
 }
@@ -24,6 +24,7 @@ ApplicationDatas = {
 DATAS = {}
 SETTING = None
 INTKEY = False
+PASSWORD = None
 
 try:
     SETTING = json.load(open(f'{sys.path[0]}/setting.json', 'r'))
@@ -68,6 +69,10 @@ else:
         print("Cannot connect to database server.\nERR:32")
         sys.exit(32)
 
+if os.path.isfile("password"):
+    with open("password", "r") as f:
+        PASSWORD = f.read()
+
 
 async def SaveDatabase():
     if SETTING["remotesave"]:
@@ -86,49 +91,44 @@ async def SaveDatabaseRemote():
     return None
 
 
-def convertReadAll() -> dict:
-    rtData = {}
-    for i in DATAS.keys():
-        if i[:1] == "i":
-            rtData[int(i[1:])] = DATAS[i]
-        elif i[:1] == "s":
-            rtData[str(i[1:])] = DATAS[i]
-    return rtData
-
-
-def convertWriteAll() -> dict:
-    rtData = {}
-    for i in DATAS.keys():
-        if type(i) == int:
-            rtData[f"i{i}"] = DATAS[i]
-        elif type(i) == str:
-            rtData[f"s{i}"] = DATAS[i]
-    return rtData
-
-
-def convertRead(data: dict) -> dict:
-    rtData = {}
-    for i in data.keys():
-        if i[:1] == "i":
-            rtData[int(i[1:])] = data[i]
-        elif i[:1] == "s":
-            rtData[str(i[1:])] = data[i]
-    return rtData
-
-
-def convertWrite(data: dict) -> dict:
-    rtData = {}
-    for i in data.keys():
-        if type(i) == int:
-            rtData[f"i{i}"] = data[i]
-        elif type(i) == str:
-            rtData[f"s{i}"] = data[i]
-    return rtData
-
-
-if "intkey" in SETTING["extras"]:
-    convertReadAll()
-    INTKEY = True
+# def convertReadAll() -> dict:
+#    rtData = {}
+#    for i in DATAS.keys():
+#        if i[:1] == "i":
+#            rtData[int(i[1:])] = DATAS[i]
+#        elif i[:1] == "s":
+#            rtData[str(i[1:])] = DATAS[i]
+#    return rtData
+#
+#
+# def convertWriteAll() -> dict:
+#    rtData = {}
+#    for i in DATAS.keys():
+#        if type(i) == int:
+#            rtData[f"i{i}"] = DATAS[i]
+#        elif type(i) == str:
+#            rtData[f"s{i}"] = DATAS[i]
+#    return rtData
+#
+#
+# def convertRead(data: dict) -> dict:
+#    rtData = {}
+#    for i in data.keys():
+#        if i[:1] == "i":
+#            rtData[int(i[1:])] = data[i]
+#        elif i[:1] == "s":
+#            rtData[str(i[1:])] = data[i]
+#    return rtData
+#
+#
+# def convertWrite(data: dict) -> dict:
+#    rtData = {}
+#    for i in data.keys():
+#        if type(i) == int:
+#            rtData[f"i{i}"] = data[i]
+#        elif type(i) == str:
+#            rtData[f"s{i}"] = data[i]
+#    return rtData
 
 
 @app.get("/info")
@@ -141,21 +141,22 @@ async def Ping(request):
     return sanic.response.json({"status": "success", "time": datetime.datetime.now().timestamp()})
 
 
-@app.get("/get_all")
-async def GetAll(request):
-    if INTKEY:
-        return sanic.response.json(convertWriteAll())
+@app.post("/get_all")
+async def GetAll(request: sanic.Request):
+    print(request.json)
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     else:
-        return sanic.response.json(DATAS)
+        return sanic.response.json({"status": "success", "contents": [{"key": i, "value": DATAS[i]} for i in list(DATAS.keys())]})
 
 
-@app.get("/get/<key>")
-async def getResponse(request, key):
+@app.post("/get")
+async def getResponse(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     try:
+        key = request.json["key"]
         rtData = {}
-        if INTKEY:
-            print(list(convertRead({key: None}).keys())[0])
-            key = list(convertRead({key: None}).keys())[0]
         if key not in DATAS:
             rtData = {"status": "error", "description": "invalid key."}
         else:
@@ -165,18 +166,21 @@ async def getResponse(request, key):
         return sanic.response.json({"status": "error", "description": repr(err)})
 
 
-@app.get("/exists/<key>")
-async def checkExists(request, key):
-    if INTKEY:
-        key = list(convertRead({key: None}).keys())[0]
+@app.post("/exists")
+async def checkExists(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
+    key = request.json["key"]
     if key not in DATAS:
         return sanic.response.json({"exist": False})
     else:
         return sanic.response.json({"exist": True})
 
 
-@app.get("/reload")
+@app.post("/reload")
 async def Reload(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     try:
         global DATAS
         DATAS = joblib.load(SETTING["location"])
@@ -187,22 +191,23 @@ async def Reload(request):
 
 @app.post("/post")
 async def postResponse(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     try:
         js = request.json
-        if INTKEY:
-            js = convertRead(request.json)
-        DATAS.update(js)
+        DATAS.update({js["key"]: js["value"]})
         await SaveDatabase()
         return sanic.response.json({"status": "success"})
     except Exception as err:
         return sanic.response.json({"status": "error", "description": repr(err)})
 
 
-@app.delete("/delete/<key>")
-async def deleteResponse(request, key):
+@app.post("/delete")
+async def deleteResponse(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     try:
-        if INTKEY:
-            key = list(convertRead({key: None}).keys())[0]
+        key = request.json["key"]
         if key not in DATAS:
             return sanic.response.json({"status": "error", "description": "invalid key."})
         else:
@@ -213,8 +218,10 @@ async def deleteResponse(request, key):
         return sanic.response.json({"status": "error", "description": repr(err)})
 
 
-@app.delete("/delete_all")
+@app.post("/delete_all")
 async def deleteAll(request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
     try:
         DATAS.clear()
         await SaveDatabase()
@@ -236,5 +243,8 @@ Debug: {SETTING['debug']}
 Remote: {SETTING['remotesave']}
 Location: {SETTING['location']}""")
 
-    app.run(host=SETTING["address"],
-            port=SETTING["port"], debug=SETTING["debug"])
+    app.run(
+        host=SETTING["address"],
+        port=SETTING["port"],
+        debug=SETTING["debug"]
+    )

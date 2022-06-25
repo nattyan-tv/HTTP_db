@@ -17,8 +17,7 @@ Simple and easy database manager using HTTP
 # Documents
 
 Documents have api references.  
-[English](https://nattyan-tv.github.io/HTTP_db/docs/en-us/index)  
-[Japanese](https://nattyan-tv.github.io/HTTP_db/docs/ja-jp/index)
+[API Reference (Japanese)](https://nattyan-tv.github.io/HTTP_db/docs/index)  
 
 # Setting
 

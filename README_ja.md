@@ -3,17 +3,25 @@
 HTTP を使用したとっつきやすいデータベースマネージャー  
 [English version](https://github.com/nattyan-tv/HTTP_db/blob/master/README.md)
 
-# 使い方
+# 使い方(Server)
 
-1. 必要なモジュールをインストールします (`pip install -r requirements.txt`)
-2. `setting.json`に必要な項目を書き込みます
-3. `main.py`を実行します
+1. Install modules (`pip install -r requirements.txt`)
+2. Write `setting.json` file
+3. Execute `main.py`
+
+# 使い方(PythonClient ラッパー)
+
+1. Install module (`pip install HTTP-db`)
+2. you can use `HTTP_db` module (Please refer to `example`)
+
+# 暗号化をする
+
+サーバーの API リファレンスをご参照ください。
 
 # ドキュメント
 
-API リファレンスがあります。  
-[日本語](https://nattyan-tv.github.io/HTTP_db/docs/ja-jp/index)  
-[英語](https://nattyan-tv.github.io/HTTP_db/docs/en-us/index)
+日本語ですが、API リファレンスがあります。  
+[API リファレンス](https://nattyan-tv.github.io/HTTP_db/docs/index)
 
 # 設定項目
 

@@ -1,4 +1,4 @@
-from .Exceptions import HTTP_db_Exception
+from .Exceptions import *
 
 import aiohttp
 import datetime
@@ -50,17 +50,17 @@ def keyConvertWrite(key: str or int) -> str:
 
 class Ping():
     """\
-HTTP_db Ping object  
+HTTP_db Ping object
 
-- Method  
+- Method
 
-`send`: リクエストを送った時間  
+    `send`: リクエストを送った時間
 
-`reach`: サーバーでリクエストを処理した時間  
+    `reach`: サーバーでリクエストを処理した時間
 
-`receive`: サーバーからレスポンスを受け取った時間  
+    `receive`: サーバーからレスポンスを受け取った時間
 
-`ping`: Ping値"""
+    `ping`: Ping値"""
 
     def __init__(self, send: float, reach: float, receive: float):
         self.send = send
@@ -70,10 +70,10 @@ HTTP_db Ping object
 
 
 class Client():
-    def __init__(self, url: str, port: int, intkey: bool = False):
+    def __init__(self, url: str = "localhost", port: int = 45276, password: str = ""):
         self.url = url
         self.port = port
-        self.intkey = intkey
+        self.password = password
 
     async def info(self) -> dict:
         async with aiohttp.ClientSession() as session:
@@ -93,105 +93,107 @@ class Client():
                     )
                     return ping
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
+                    raise UnknownDatabaseError()
 
     async def exists(self, key: str or int) -> bool:
+        if self.intkey is True:
+            if type(key) is int:
+                key = f"i{key}"
+            elif type(key) is str:
+                key = f"s{key}"
         async with aiohttp.ClientSession() as session:
-            if self.intkey is True:
-                if type(key) is int:
-                    key = f"i{key}"
-                elif type(key) is str:
-                    key = f"s{key}"
-            async with session.get(f"http://{self.url}:{self.port}/exists/{key}") as r:
+            async with session.post(f"http://{self.url}:{self.port}/exists", json={"password": self.password}) as r:
                 responseData = await r.json()
                 return bool(responseData["exist"])
 
     async def reload(self) -> None:
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://{self.url}:{self.port}/reload") as r:
+            async with session.post(f"http://{self.url}:{self.port}/reload", json={"password": self.password}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
                 elif responseData["status"] == "error":
-                    raise HTTP_db_Exception.DatabaseIOError()
+                    raise DatabaseIOError()
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
+                    raise UnknownDatabaseError()
 
     async def get(self, key: str or int):
         async with aiohttp.ClientSession() as session:
-            if self.intkey:
-                key = keyConvertWrite(key=key)
-            async with session.get(f"http://{self.url}:{self.port}/get/{key}") as r:
+            async with session.post(f"http://{self.url}:{self.port}/get", json={"password": self.password, "key": key}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return responseData["value"]
                 elif responseData["status"] == "error":
                     if responseData["description"] == "invalid key.":
-                        raise HTTP_db_Exception.DatabaseKeyError(
+                        raise DatabaseKeyError(
                             responseData["description"]
                         )
                     else:
-                        raise HTTP_db_Exception.DatabaseReadError(
+                        raise DatabaseReadError(
                             responseData["description"]
                         )
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
+                    raise UnknownDatabaseError()
 
     async def get_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://{self.url}:{self.port}/get_all") as r:
+            async with session.post(f"http://{self.url}:{self.port}/get_all", json={"password": self.password}) as r:
                 responseData = await r.json()
-                if self.intkey:
-                    return convertRead(responseData)
-                return responseData
+                if responseData["status"] == "error":
+                    if responseData["description"] == "Authentication Failed":
+                        raise DatabaseAuthenticationError()
+                    else:
+                        raise UnknownDatabaseError()
+                return {i["key"]: i["value"] for i in responseData["contents"]}
 
     async def post(self, key: str or int, value: str or int or list or tuple or dict):
-        if self.intkey:
-            key = keyConvertWrite(key=key)
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/post", json={key: value}) as r:
+            async with session.post(f"http://{self.url}:{self.port}/post", json={"password": self.password, "key": key, "value": value}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
                 elif responseData["status"] == "error":
-                    raise HTTP_db_Exception.DatabaseWriteError(
-                        responseData["description"]
-                    )
+                    if responseData["description"] == "Authentication Failed":
+                        raise DatabaseAuthenticationError()
+                    else:
+                        raise DatabaseWriteError(
+                            responseData["description"]
+                        )
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
+                    raise UnknownDatabaseError()
 
     async def delete(self, key: str or int):
-        if self.intkey:
-            key = keyConvertWrite(key=key)
         async with aiohttp.ClientSession() as session:
-            async with session.delete(f"http://{self.url}:{self.port}/delete/{key}") as r:
+            async with session.post(f"http://{self.url}:{self.port}/delete", json={"password": self.password, "key": key}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
                 elif responseData["status"] == "error":
                     if responseData["description"] == "invalid key.":
-                        raise HTTP_db_Exception.DatabaseKeyError(
+                        raise DatabaseKeyError(
                             responseData["description"]
                         )
+                    elif responseData["description"] == "Authentication Failed":
+                        raise DatabaseAuthenticationError()
                     else:
-                        raise HTTP_db_Exception.DatabaseDeleteError(
+                        raise DatabaseDeleteError(
                             responseData["description"]
                         )
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
+                    raise UnknownDatabaseError()
 
     async def delete_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.delete(f"http://{self.url}:{self.port}/delete_all") as r:
+            async with session.post(f"http://{self.url}:{self.port}/delete_all", json={"password": self.password}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
                 elif responseData["status"] == "error":
-                    raise HTTP_db_Exception.DatabaseDeleteError(
-                        responseData["description"]
-                    )
+                    if responseData["description"] == "Authentication Failed":
+                        raise DatabaseAuthenticationError()
+                    else:
+                        raise DatabaseDeleteError(
+                            responseData["description"]
+                        )
                 else:
-                    raise HTTP_db_Exception.UnknownDatabaseError()
-
-
-Client("localhost", 8080)
+                    raise UnknownDatabaseError()

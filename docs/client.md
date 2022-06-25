@@ -8,7 +8,7 @@
 その初期化したインスタンスで関数を実行することでデータ取得などがおこなえます。
 
 ```py
-clinet = HTTP_db.Clinet("localhost", 8080)
+clinet = HTTP_db.Clinet(urL="localhost", port=8080, password="amagasaki2022")
 
 datas = await client.get_all()
 await client.post("temp", datas)
@@ -18,7 +18,7 @@ await client.post("temp", datas)
 
 ## Client
 
-`class HTTP_db.Client(url, port)`
+`class HTTP_db.Client(url, port, password)`
 
 - 関数:
   - async [`info`](#await-info)
@@ -30,6 +30,7 @@ await client.post("temp", datas)
 - 引数:
   - `url` ([str](https://docs.python.org/3/library/functions.html#func-str)): サーバーアドレス
   - `port` ([int](https://docs.python.org/3/library/functions.html#int)): サーバーポート
+  - `password` ([str](https://docs.python.org/3/library/functions.html#func-str)): データベースのパスワードです。パスワードをかけていない場合は不要です。
 
 ### 関数
 
@@ -177,3 +178,8 @@ Ping 値（往復のレイテンシー）
 ### `exception DatabaseUnknownError`
 
 サーバーとの接続などでエラーが発生した場合に発生します。
+
+### `exception DatabaseAuthenticationError`
+
+データベースがパスワードで保護されているが、パスワードが違う又はパスワードが設定されていない場合に発生します。  
+パスワードはインスタンスの初期化時に設定できます。

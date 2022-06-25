@@ -169,11 +169,14 @@ async def getResponse(request):
 async def checkExists(request):
     if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
         return sanic.response.json({"status": "error", "description": "Authentication Failed"})
-    key = request.json["key"]
-    if key not in DATAS:
-        return sanic.response.json({"exist": False})
-    else:
-        return sanic.response.json({"exist": True})
+    try:
+        key = request.json["keyname"]
+        if key not in DATAS:
+            return sanic.response.json({"status": "success", "exist": False})
+        else:
+            return sanic.response.json({"status": "success", "exist": True})
+    except Exception as err:
+        return sanic.response.json({"status": repr(err)})
 
 
 @app.post("/reload")
@@ -231,7 +234,7 @@ async def deleteAll(request):
 
 if __name__ == '__main__':
     print(f"""\
-HTTP_db
+HTTP_db {ApplicationDatas['version']}
 Simple and easy database manager using HTTP.
 
 Tw: @nattyan_tv

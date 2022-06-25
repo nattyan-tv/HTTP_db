@@ -96,14 +96,14 @@ class Client():
                     raise UnknownDatabaseError()
 
     async def exists(self, key: str or int) -> bool:
-        if self.intkey is True:
-            if type(key) is int:
-                key = f"i{key}"
-            elif type(key) is str:
-                key = f"s{key}"
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/exists", json={"password": self.password}) as r:
+            async with session.post(f"http://{self.url}:{self.port}/exists", json={"password": self.password, "keyname": key}) as r:
                 responseData = await r.json()
+                if responseData["status"] == "error":
+                    if responseData["description"] == "Authentication Failed":
+                        raise DatabaseAuthenticationError()
+                    else:
+                        raise UnknownDatabaseError()
                 return bool(responseData["exist"])
 
     async def reload(self) -> None:

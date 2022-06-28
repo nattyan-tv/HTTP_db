@@ -1,31 +1,35 @@
 # HTTP_db
 
-Simple and easy database manager using HTTP  
-[日本語版](https://github.com/nattyan-tv/HTTP_db/blob/master/README_ja.md)
+HTTP を使用したとっつきやすいデータベースマネージャー  
+[English version](https://github.com/nattyan-tv/HTTP_db/blob/master/README.md)
 
-# Usage(Server)
+# 使い方(Server)
 
 1. Install modules (`pip install -r requirements.txt`)
 2. Write `setting.json` file
 3. Execute `main.py`
 
-# Usage(Client)
+# 使い方(PythonClient ラッパー)
 
 1. Install module (`pip install HTTP-db`)
 2. you can use `HTTP_db` module (Please refer to `example`)
 
-# Documents
+# 暗号化をする
 
-Documents have api references.  
-[API Reference (Japanese)](https://nattyan-tv.github.io/HTTP_db/docs/index)  
+サーバーの API リファレンスをご参照ください。
 
-# Setting
+# ドキュメント
 
-| Name       | Description                                                  | Type |
-| ---------- | ------------------------------------------------------------ | ---- |
-| address    | HTTP Server address                                          | str  |
-| port       | HTTP Server port                                             | int  |
-| debug      | HTTP Server debug mode                                       | bool |
-| remotesave | Remote save mode                                             | bool |
-| location   | If remotesave is true, database key, else, savedata location | str  |
-| cell       | If remotesave is true, database cell                         | str  |
+日本語ですが、API リファレンスがあります。  
+[API リファレンス](https://nattyan-tv.github.io/HTTP_db/docs/index)
+
+# 設定項目
+
+| 名前       | 説明                                                                             | 型   |
+| ---------- | -------------------------------------------------------------------------------- | ---- |
+| address    | HTTP サーバーのアドレス                                                          | str  |
+| port       | HTTP サーバーのポート番号                                                        | int  |
+| debug      | HTTP サーバーのデバッグモード                                                    | bool |
+| remotesave | リモートモード                                                                   | bool |
+| location   | リモートモードが有効の場合、データベースのキー。無効の場合、データを保存する場所 | str  |
+| cell       | リモートモードが有効の場合、データベースのセル。                                 | str  |

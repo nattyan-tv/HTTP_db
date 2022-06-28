@@ -70,20 +70,19 @@ HTTP_db Ping object
 
 
 class Client():
-    def __init__(self, url: str = "localhost", port: int = 45276, password: str = ""):
+    def __init__(self, url: str = "http://localhost:8080", password: str = ""):
         self.url = url
-        self.port = port
         self.password = password
 
     async def info(self) -> dict:
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://{self.url}:{self.port}/info") as resp:
+            async with session.get(f"{self.url}/info") as resp:
                 return await resp.json()
 
     async def ping(self) -> Ping:
         now = datetime.datetime.now().timestamp()
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://{self.url}:{self.port}/ping") as r:
+            async with session.get(f"{self.url}/ping") as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     ping = Ping(
@@ -97,7 +96,7 @@ class Client():
 
     async def exists(self, key: str or int) -> bool:
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/exists", json={"password": self.password, "keyname": key}) as r:
+            async with session.post(f"{self.url}/exists", json={"password": self.password, "keyname": key}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "error":
                     if responseData["description"] == "Authentication Failed":
@@ -108,7 +107,7 @@ class Client():
 
     async def reload(self) -> None:
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/reload", json={"password": self.password}) as r:
+            async with session.post(f"{self.url}/reload", json={"password": self.password}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
@@ -119,7 +118,7 @@ class Client():
 
     async def get(self, key: str or int):
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/get", json={"password": self.password, "key": key}) as r:
+            async with session.post(f"{self.url}/get", json={"password": self.password, "key": key}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return responseData["value"]
@@ -137,7 +136,7 @@ class Client():
 
     async def get_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/get_all", json={"password": self.password}) as r:
+            async with session.post(f"{self.url}/get_all", json={"password": self.password}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "error":
                     if responseData["description"] == "Authentication Failed":
@@ -148,7 +147,7 @@ class Client():
 
     async def post(self, key: str or int, value: str or int or list or tuple or dict):
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/post", json={"password": self.password, "key": key, "value": value}) as r:
+            async with session.post(f"{self.url}/post", json={"password": self.password, "key": key, "value": value}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
@@ -164,7 +163,7 @@ class Client():
 
     async def delete(self, key: str or int):
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/delete", json={"password": self.password, "key": key}) as r:
+            async with session.post(f"{self.url}/delete", json={"password": self.password, "key": key}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None
@@ -184,7 +183,7 @@ class Client():
 
     async def delete_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://{self.url}:{self.port}/delete_all", json={"password": self.password}) as r:
+            async with session.post(f"{self.url}/delete_all", json={"password": self.password}) as r:
                 responseData = await r.json()
                 if responseData["status"] == "success":
                     return None

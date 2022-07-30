@@ -15,3 +15,5 @@ modules/README.md
 modules/setup.py
 
 password
+
+.venv

@@ -94,6 +94,14 @@ class Client():
                 else:
                     raise UnknownDatabaseError()
 
+    async def auth(self) -> bool:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{self.url}/auth", json={"password": self.password}) as r:
+                responseData = await r.json()
+                if responseData["status"] == "error":
+                    return False
+                return True
+
     async def exists(self, key: str or int) -> bool:
         async with aiohttp.ClientSession() as session:
             async with session.post(f"{self.url}/exists", json={"password": self.password, "keyname": key}) as r:

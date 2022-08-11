@@ -140,6 +140,12 @@ async def Info(request):
 async def Ping(request):
     return sanic.response.json({"status": "success", "time": datetime.datetime.now().timestamp()})
 
+@app.post("/auth")
+async def Auth(request: sanic.Request):
+    if PASSWORD is not None and "password" not in request.json or request.json["password"] != PASSWORD:
+        return sanic.response.json({"status": "error", "description": "Authentication Failed"})
+    else:
+        return sanic.response.json({"status": "success"})
 
 @app.post("/get_all")
 async def GetAll(request: sanic.Request):
